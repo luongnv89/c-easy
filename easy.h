@@ -17,7 +17,7 @@
  int str_compare(char * str1, char * str2);
 
  /**
-  * Get the index of a substring in a string
+  * Get the first index of a substring in a string
   * @param  str    big string
   * @param  substr substring to find the index
   * @return        -1: if @substr is not a substring of string @str
