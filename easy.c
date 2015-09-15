@@ -2,6 +2,8 @@
  * c-easy library implementation
  */
 
+#include "easy.h"
+
  int str_compare(char * str1, char * str2){
  	if(str1!=NULL && str2!=NULL){
  		return strcmp(str1,str2)==0;	
