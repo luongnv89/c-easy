@@ -61,3 +61,17 @@
  * @return         An array of string
  */
  char ** str_split(char * str, char * spliter);
+
+/**
+* Get a substring between 2 substrings
+* @param  str     big string
+* @param  begin   substring begin of value
+* @param  end     substring end of value
+* @return         substring between 2 substring
+* Example:
+* str = "I am the powest hero";
+* begin = "am ";
+* end = " hero";
+* return should be: "the powest"
+*/
+char * str_subvalue(char *str, char* begin, char * end);

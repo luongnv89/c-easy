@@ -103,3 +103,36 @@
  	return NULL;
  	
  }
+
+ char * str_subvalue(char *str, char* begin, char * end){
+    if(str != NULL && begin !=NULL && end != NULL){
+        char *fromBegin;
+        fromBegin = (char*)malloc(sizeof(str));
+
+        fromBegin = strstr(str,begin);
+        fromBegin = fromBegin + strlen(begin);
+
+        if(fromBegin == NULL){
+            return NULL;
+        }else{
+            char * endOfLine;
+            endOfLine = (char*)malloc(sizeof(fromBegin));
+
+            endOfLine = strstr(fromBegin,end);
+
+            if(endOfLine == NULL){
+                return NULL;
+            }else{
+                int len;
+                len = strlen(fromBegin)-strlen(endOfLine);
+                char *ret;
+                ret = (char * )malloc((len+1)*sizeof(char));
+                strncpy(ret,fromBegin,len);
+                ret[len]='\0';
+                return ret;
+            }
+
+        }
+    }
+    return NULL;
+}
