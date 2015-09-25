@@ -136,3 +136,26 @@
     }
     return NULL;
 }
+
+char * str_subend(char *str, char* begin){
+	if(str != NULL && begin !=NULL){
+        char *fromBegin;
+        fromBegin = (char*)malloc(sizeof(str));
+
+        fromBegin = strstr(str,begin);
+        fromBegin = fromBegin + strlen(begin);
+
+        if(fromBegin == NULL){
+            return NULL;
+        }else{
+            int len;
+            len = strlen(fromBegin);
+            char *ret;
+            ret = (char * )malloc((len+1)*sizeof(char));
+            strncpy(ret,fromBegin,len);
+            ret[len]='\0';
+            return ret;
+        }
+    }
+    return NULL;
+}

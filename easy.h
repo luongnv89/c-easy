@@ -75,3 +75,15 @@
 * return should be: "the powest"
 */
 char * str_subvalue(char *str, char* begin, char * end);
+
+/**
+ * Get a substring of a string, start from a substring
+ * @param  str   Big string
+ * @param  begin String to start
+ * @return       substring from string @begin to end of string (not include string @begin)
+ * Example:
+ * str = "I am the powest hero";
+ * begin = "am ";
+ * return should be: "the powest hero"
+ */
+char * str_subend(char *str, char* begin);
