@@ -159,3 +159,59 @@ char * str_subend(char *str, char* begin){
     }
     return NULL;
 }
+
+char ** str_add_new_string(char **array,char *str){
+  if(str == NULL) return 0;
+  int i=0;
+  while(array[i] != NULL){
+    i++;
+  }
+
+  array[i] = (char*)malloc(strlen(str)+1);
+  strcpy(array[i],str);
+  array[i][strlen(array[i])]='\0';
+  return array;
+}
+
+void str_print_array(char **array){
+    int i=0;
+    while(array[i] != NULL){
+        printf("Array[%d]: %s\n",i,array[i]);
+        i++;
+    }
+}
+
+
+char * str_exe_command(char *cmd){
+    if(cmd==NULL){
+        return NULL;
+    }else{
+        FILE *pp;
+        char *output;
+        output=(char*)malloc(255*sizeof(char));
+        pp = popen(cmd, "r");
+        if (pp != NULL) {
+            while (1) {
+                char *line;
+                char buf[255];
+                line = fgets(buf, sizeof(buf), pp);
+                if (line != NULL) {
+                    if(output==NULL){
+                        output=line;
+                    }else{
+                        int len = strlen(output)+strlen(line)+1; 
+                        output=realloc(output,len);
+                        strcat(output,line);
+                        output[len]='\0';    
+                    }
+                }else{
+                    // End of output
+                    break;
+                }
+            }
+            pclose(pp);
+        }
+        return output;
+    }
+    return NULL;
+}

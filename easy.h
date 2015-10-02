@@ -6,7 +6,6 @@
  #include <stdlib.h>
  #include <stdio.h>
  #include <string.h>
-
 /**
  * Compare 2 strings
  * @param  str1 String 1
@@ -87,3 +86,26 @@ char * str_subvalue(char *str, char* begin, char * end);
  * return should be: "the powest hero"
  */
 char * str_subend(char *str, char* begin);
+
+/**
+ * Add a string into an array of string. New string will be filled in the first NULL element of array
+ * @param  array Array of string
+ * @param  str   String to add
+ * @return       new array of string
+ *               old array of string if the adding is not successful
+ */
+char ** str_add_new_string(char **array,char *str);
+
+/**
+ * Print string in an array of string until the first NULL element;
+ * @param array array string
+ */
+void str_print_array(char **array);
+
+
+/**
+ * Executes a command in linux and return the output
+ * @param  cmd command to be executed
+ * @return     the output of command
+ */
+char * str_exe_command(char *cmd);

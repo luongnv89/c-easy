@@ -2,9 +2,11 @@
 #include <stdio.h>
 #include "easy.h"
 
-const char str1[] = "Je suis en train de tester. Je suis tres content maintenant";
+char *str1= "Je suis en train de tester. Je suis tres content maintenant";
 
-const char str2[] = "Il est dimanche. Il pleux";
+char *str2= "Il est dimanche. Il pleux";
+
+char * str_array[10];
 
 int main(int argc, char const *argv[])
 {
@@ -35,5 +37,32 @@ int main(int argc, char const *argv[])
 	char *test4;
 	test4 = str_subend(str1,"suis");
 	printf("result: \n%s\n",test4);
+
+	str_print_array(str_array);
+	str_add_new_string(str_array,"ABC");
+	str_print_array(str_array);
+	str_add_new_string(str_array,"ABCD");
+	str_print_array(str_array);
+	str_add_new_string(str_array,"ABCE");
+	str_print_array(str_array);
+	str_add_new_string(str_array,"ABCF");
+	str_print_array(str_array);
+	str_array[2]=NULL;
+	str_print_array(str_array);
+	str_add_new_string(str_array,"ABCF-hehe");
+	str_print_array(str_array);
+
+	if(strlen(str1)>strlen(str2)){
+		str1 = str2;
+	}
+
+	printf("result: \n%s\n",str1);
+	
+	char *cmd;
+	cmd = (char*)malloc(255*sizeof(char));
+	printf("Enter command to be executed: \n");
+	scanf("%s",cmd);
+	char *output = str_exe_command(cmd);
+	printf("Output: %s",output);
 	return 0;
 }
