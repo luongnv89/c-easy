@@ -215,3 +215,43 @@ char * str_exe_command(char *cmd){
     }
     return NULL;
 }
+
+int * str_get_indexes(char *str,int c){
+    int *indexes;
+    indexes = (int*)malloc((strlen(str)+1)*sizeof(int));
+    int i=0;
+    int current_index = 0;
+    for(i=0;i<strlen(str);i++){
+        if((int)str[i]==c){
+            indexes[current_index]=i;
+            current_index++;
+        }
+    }
+    indexes[current_index]=-1;
+    return indexes;
+}
+
+char * str_replace_all_char(char *str,int c1, int c2){
+    char *new_str;
+    new_str = (char*)malloc(strlen(str)+1);
+    memcpy(new_str,str,strlen(str));
+    new_str[strlen(str)] = '\0';
+    int i;
+    for(i=0;i<strlen(str);i++){
+        if((int)new_str[i]==c1){
+            new_str[i]=(char)c2;
+        }
+    }
+    return new_str;
+}
+
+char * str_sub_index(char *str, int start, int end){
+    
+    int len = end - start-1;
+
+    char *substr;
+    substr = (char*)malloc(len);
+    memcpy(substr,str + start + 1,len);
+    substr[len]='\0';
+    return substr;    
+}

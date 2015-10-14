@@ -109,3 +109,32 @@ void str_print_array(char **array);
  * @return     the output of command
  */
 char * str_exe_command(char *cmd);
+
+
+/**
+ * Get all indexes of a character in a string
+ * @param  str string
+ * @param  c   ascii code number of character
+ * @return     an integer array which contains the list of indexes of character in string
+ */
+int * str_get_indexes(char *str, int c);
+
+/**
+ * Replace a character by another character in all string
+ * @param  str string
+ * @param  c1  ascii code number of character will be replaced
+ * @param  c2  ascii code number of replacing character
+ * @return     new string after replacing
+ */
+char * str_replace_all_char(char *str,int c1, int c2);
+
+/**
+ * Get substring of a string between two index
+ * @param  str   string to get substring from
+ * @param  start start index
+ *               To get sub string from start of string, the start index is -1
+ * @param  end   end index
+ *               To get sub string to the end of string, the end index of string is strlen(str)
+ * @return       substring between @start and @end
+ */
+char * str_sub_index(char *str, int start, int end);
