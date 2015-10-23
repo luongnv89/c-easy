@@ -39,8 +39,20 @@
  * @param  str1 The first string to combine
  * @param  str2 The second string to combine
  * @return      a new string which is a combination of @str1 and @str2
+ *              NULL if both @str1 and @str2 are NULL
+ *              A copy of @str1 if @str2 is NULL
+ *              A copy of @str2 if @str1 is NULL
  */
  char * str_combine(char * str1, char * str2);
+
+/**
+ * Split a string by a spliter
+ * @param  str     String is going to be split
+ * @param  spliter spliter
+ * @return         An array of string
+ */
+ char ** str_split(char * str, char * spliter);
+ 
 
 /**
  * Replace a substring by another substring in a string
@@ -52,14 +64,6 @@
  */
  int str_replace(char * str, char * str1, char * rep);
 
-
-/**
- * Split a string by a spliter
- * @param  str     String is going to be split
- * @param  spliter spliter
- * @return         An array of string
- */
- char ** str_split(char * str, char * spliter);
 
 /**
 * Get a substring between 2 substrings
@@ -108,7 +112,7 @@ void str_print_array(char **array);
  * @param  cmd command to be executed
  * @return     the output of command
  */
-char * str_exe_command(char *cmd);
+char * cmd_run_command(char *cmd);
 
 
 /**

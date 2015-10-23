@@ -24,9 +24,11 @@
  char * str_sub(char * str, int start_index, int end_index){
  	if(str != NULL && start_index >= 0 && end_index > start_index){
  		if(end_index >= strlen(str)) return NULL;
- 		char * sub;
- 		sub = (char *)malloc(end_index - start_index + 1);
- 		memcpy(sub,(str + start_index), start_index - end_index);
+ 		int len = end_index - start_index + 1;
+        char * sub;
+ 		sub = (char *)malloc(len + 1);
+ 		memcpy(sub,(str + start_index), len);
+        sub[len]='\0';
  		return sub;
  	}
  	return NULL;
@@ -35,21 +37,56 @@
 
  char * str_combine(char * str1, char * str2){
  	char * comb;
+    int len = 0;
  	if(str1 == NULL && str2 == NULL){
  		comb == NULL;
  	}else if(str1 == NULL && str2 != NULL) {
- 		comb = (char *)malloc(sizeof(str2));
- 		strcpy(comb,str2);
+        len = strlen(str2);
+ 		comb = (char *)malloc(len + 1);
+ 		memcpy(comb,str2,len);
+        comb[len]='\0';
  	}else if(str2 == NULL && str1 != NULL){
- 		comb = (char *)malloc(sizeof(str1));
+        len = strlen(str1);
+ 		comb = (char *)malloc(len + 1);
  		strcpy(comb,str1);
  	}else{
- 		comb = (char*)malloc(sizeof(str1)+sizeof(str2));
+        len = strlen(str1) + strlen(str2);
+ 		comb = (char*)malloc(len + 1);
  		strcpy(comb,str1);
- 		strcpy(comb,str2);
+ 		strcat(comb,str2);
  	}
  	return comb;
  }
+
+char ** str_split(char * str, char * spliter){
+
+    if(str != NULL && spliter !=NULL){
+        char * array_string[255];
+
+        int start_index = 0;
+        int s_index;
+        s_index = str_index(str,spliter);
+        int index_of_string = 0;
+        while(s_index != -1){
+            char *new_string;
+            new_string = str_sub(str + start_index,start_index,s_index);
+            array_string[index_of_string] = new_string;
+            start_index = s_index + strlen(spliter);
+            index_of_string++;
+            s_index = str_index(str + start_index,spliter);
+        }
+
+        if(str + start_index != NULL){
+            char *last_string;
+            last_string = str_sub(str + start_index, start_index, strlen(str)-1);
+            array_string[index_of_string] = last_string;
+        }
+        return array_string;
+     }
+    return NULL;
+    
+ }
+
 
  int str_replace(char * str, char * str1, char * rep){
  	if(str != NULL && str1 != NULL && rep !=NULL){
@@ -72,35 +109,6 @@
 	 	return new_string;	
  	}
  	return 0;
- 	
- }
-
- char ** str_split(char * str, char * spliter){
-
- 	if(str != NULL && spliter !=NULL){
- 		char * array_string[255];
-
-	 	int start_index = 0;
-	 	int s_index;
-	 	s_index = str_index(str,spliter);
-	 	int index_of_string = 0;
-	 	while(s_index != -1){
-	 		char *new_string;
-	 		new_string = str_sub(str + start_index,start_index,s_index);
-	 		array_string[index_of_string] = new_string;
-	 		start_index = s_index + strlen(spliter);
-	 		index_of_string++;
-	 		s_index = str_index(str + start_index,spliter);
-	 	}
-
-	 	if(str + start_index != NULL){
-	 		char *last_string;
-	 		last_string = str_sub(str + start_index, start_index, strlen(str)-1);
-	 		array_string[index_of_string] = last_string;
-	 	}
-	 	return array_string;
-	 }
- 	return NULL;
  	
  }
 
@@ -182,7 +190,7 @@ void str_print_array(char **array){
 }
 
 
-char * str_exe_command(char *cmd){
+char * cmd_run_command(char *cmd){
     if(cmd==NULL){
         return NULL;
     }else{
@@ -209,8 +217,8 @@ char * str_exe_command(char *cmd){
                     break;
                 }
             }
-            pclose(pp);
         }
+        pclose(pp);
         return output;
     }
     return NULL;
