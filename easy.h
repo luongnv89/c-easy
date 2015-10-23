@@ -6,7 +6,6 @@
  #include <stdlib.h>
  #include <stdio.h>
  #include <string.h>
-
 /**
  * Compare 2 strings
  * @param  str1 String 1
@@ -75,3 +74,67 @@
 * return should be: "the powest"
 */
 char * str_subvalue(char *str, char* begin, char * end);
+
+/**
+ * Get a substring of a string, start from a substring
+ * @param  str   Big string
+ * @param  begin String to start
+ * @return       substring from string @begin to end of string (not include string @begin)
+ * Example:
+ * str = "I am the powest hero";
+ * begin = "am ";
+ * return should be: "the powest hero"
+ */
+char * str_subend(char *str, char* begin);
+
+/**
+ * Add a string into an array of string. New string will be filled in the first NULL element of array
+ * @param  array Array of string
+ * @param  str   String to add
+ * @return       new array of string
+ *               old array of string if the adding is not successful
+ */
+char ** str_add_new_string(char **array,char *str);
+
+/**
+ * Print string in an array of string until the first NULL element;
+ * @param array array string
+ */
+void str_print_array(char **array);
+
+
+/**
+ * Executes a command in linux and return the output
+ * @param  cmd command to be executed
+ * @return     the output of command
+ */
+char * str_exe_command(char *cmd);
+
+
+/**
+ * Get all indexes of a character in a string
+ * @param  str string
+ * @param  c   ascii code number of character
+ * @return     an integer array which contains the list of indexes of character in string
+ */
+int * str_get_indexes(char *str, int c);
+
+/**
+ * Replace a character by another character in all string
+ * @param  str string
+ * @param  c1  ascii code number of character will be replaced
+ * @param  c2  ascii code number of replacing character
+ * @return     new string after replacing
+ */
+char * str_replace_all_char(char *str,int c1, int c2);
+
+/**
+ * Get substring of a string between two index
+ * @param  str   string to get substring from
+ * @param  start start index
+ *               To get sub string from start of string, the start index is -1
+ * @param  end   end index
+ *               To get sub string to the end of string, the end index of string is strlen(str)
+ * @return       substring between @start and @end
+ */
+char * str_sub_index(char *str, int start, int end);
