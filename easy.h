@@ -13,7 +13,7 @@
  * @return      1: if two strings are equal
  *              0: two string are not equal
  */
- int str_compare(char * str1, char * str2);
+ int str_compare(char * str1, char * str2); // Passed
 
  /**
   * Get the first index of a substring in a string
@@ -22,7 +22,7 @@
   * @return        -1: if @substr is not a substring of string @str
   *               >=0: index of @substr in @str
   */
- int str_index(char * str, char *  substr);
+ int str_index(char * str, char *  substr); // Passed
 
  /**
   * Get a substring of a string with the input of start and end index
@@ -32,7 +32,7 @@
   * @return             NULL: if the input index is invalid
   *                     a new string which is the substring of @str from @start_index to @end_index
   */		
- char * str_sub(char * str, int start_index, int end_index);
+ char * str_sub(char * str, int start_index, int end_index); // Passed
 
 /**
  * Get the combination of two strings
@@ -43,15 +43,17 @@
  *              A copy of @str1 if @str2 is NULL
  *              A copy of @str2 if @str1 is NULL
  */
- char * str_combine(char * str1, char * str2);
+ char * str_combine(char * str1, char * str2); // Passed
 
 /**
  * Split a string by a spliter
  * @param  str     String is going to be split
  * @param  spliter spliter
  * @return         An array of string
+ *                 NULL if @str or @spliter is(are) NULL
+ *                 Array with only 1 element if @spliter does not exists in @str
  */
- char ** str_split(char * str, char * spliter);
+ char ** str_split(char * str, char * spliter); // Passed
  
 
 /**
@@ -104,7 +106,7 @@ char ** str_add_new_string(char **array,char *str);
  * Print string in an array of string until the first NULL element;
  * @param array array string
  */
-void str_print_array(char **array);
+void str_print_array(char **array); // Passed
 
 
 /**
@@ -112,7 +114,7 @@ void str_print_array(char **array);
  * @param  cmd command to be executed
  * @return     the output of command
  */
-char * cmd_run_command(char *cmd);
+char * cmd_run_command(char *cmd); // Passed
 
 
 /**
@@ -121,7 +123,7 @@ char * cmd_run_command(char *cmd);
  * @param  c   ascii code number of character
  * @return     an integer array which contains the list of indexes of character in string
  */
-int * str_get_indexes(char *str, int c);
+int * str_get_indexes(char *str, int c); // Passed
 
 /**
  * Replace a character by another character in all string
@@ -130,15 +132,4 @@ int * str_get_indexes(char *str, int c);
  * @param  c2  ascii code number of replacing character
  * @return     new string after replacing
  */
-char * str_replace_all_char(char *str,int c1, int c2);
-
-/**
- * Get substring of a string between two index
- * @param  str   string to get substring from
- * @param  start start index
- *               To get sub string from start of string, the start index is -1
- * @param  end   end index
- *               To get sub string to the end of string, the end index of string is strlen(str)
- * @return       substring between @start and @end
- */
-char * str_sub_index(char *str, int start, int end);
+char * str_replace_all_char(char *str,int c1, int c2); // Passed

@@ -85,11 +85,55 @@ void test_str_combine(void){
    CU_ASSERT_STRING_EQUAL(str0,str_combine(NULL,str0));
 }
 
+
+void test_str_get_indexes(void){
+   int * array = str_get_indexes(str,'i');
+   int * array2 = str_get_indexes(str,'w');
+   CU_ASSERT_EQUAL(5,array[0]);
+   CU_ASSERT_EQUAL(11,array[1]);
+   CU_ASSERT_EQUAL(-1,array[2]);
+   CU_ASSERT_EQUAL(-1,array2[0]);
+   CU_ASSERT_PTR_NULL(str_get_indexes(NULL,'c'));
+}
+
+void test_str_replace_all_char(void){
+   CU_ASSERT_STRING_EQUAL(str_replace_all_char(str,'J','Z'),"Ze suis CUnit.");
+   CU_ASSERT_STRING_EQUAL(str_replace_all_char(str,'Z','a'),str);
+   CU_ASSERT_PTR_NULL(str_replace_all_char(NULL,'Z','a'));
+}
+
+void test_str_print_array(void){
+   char * array[5];
+   array[0]="Je";
+   array[1]=" suis";
+   array[2]=" CUnit";
+   array[3]=". ";
+   array[4]=" Bonjour!";
+   array[5]=" Enchantez";
+   printf("\n");
+   str_print_array(array);
+   printf("\n");
+}
+
+void test_str_split(void){
+   CU_ASSERT_PTR_NULL(str_split(NULL,"suis"));
+   CU_ASSERT_PTR_NULL(str_split(str,NULL));
+   CU_ASSERT_PTR_NULL(str_split(NULL,NULL));
+
+   char ** array = str_split(str,"hola");
+   CU_ASSERT_STRING_EQUAL(array[0],str);
+   CU_ASSERT_PTR_NULL(array[1]);
+
+   char ** array2 = str_split(str,"suis");
+   CU_ASSERT_STRING_EQUAL(array2[0],"Je ");
+   CU_ASSERT_STRING_EQUAL(array2[1]," CUnit.");
+   CU_ASSERT_PTR_NULL(array[2]);
+
+}
+
 void test_cmd_run_command(void){
-   char *ret;
-   ret = cmd_run_command("ls -ll");
-   printf("%s\n", ret);
-   CU_ASSERT_PTR_NOT_NULL(ret);
+   CU_ASSERT_PTR_NOT_NULL(cmd_run_command("ls -ll"));
+   CU_ASSERT_PTR_NOT_NULL(cmd_run_command("uname -a"));
 }
 
 /* The main() function for setting up and running the tests.
@@ -122,7 +166,11 @@ int main()
    if ((NULL == CU_add_test(pSuite_string, "test of str_compare()", test_str_compare))||
        (NULL == CU_add_test(pSuite_string, "test of str_index", test_str_index))||
        (NULL == CU_add_test(pSuite_string, "test of str_sub", test_str_sub))||
-       (NULL == CU_add_test(pSuite_string, "test of str_combine", test_str_combine)))
+       (NULL == CU_add_test(pSuite_string, "test of str_combine", test_str_combine))||
+       (NULL == CU_add_test(pSuite_string, "test of str_get_indexes", test_str_get_indexes))||
+       (NULL == CU_add_test(pSuite_string, "test of str_replace_all_char", test_str_replace_all_char))||
+       (NULL == CU_add_test(pSuite_string, "test of str_print_array", test_str_print_array))||
+       (NULL == CU_add_test(pSuite_string, "test of str_split", test_str_split)))
    {
       CU_cleanup_registry();
       return CU_get_error();

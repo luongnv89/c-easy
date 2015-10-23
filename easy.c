@@ -69,7 +69,7 @@ char ** str_split(char * str, char * spliter){
         int index_of_string = 0;
         while(s_index != -1){
             char *new_string;
-            new_string = str_sub(str + start_index,start_index,s_index);
+            new_string = str_sub(str,start_index,s_index-1);
             array_string[index_of_string] = new_string;
             start_index = s_index + strlen(spliter);
             index_of_string++;
@@ -78,9 +78,10 @@ char ** str_split(char * str, char * spliter){
 
         if(str + start_index != NULL){
             char *last_string;
-            last_string = str_sub(str + start_index, start_index, strlen(str)-1);
+            last_string = str_sub(str, start_index, strlen(str)-1);
             array_string[index_of_string] = last_string;
         }
+        array_string[index_of_string+1]=NULL;
         return array_string;
      }
     return NULL;
@@ -218,13 +219,14 @@ char * cmd_run_command(char *cmd){
                 }
             }
         }
-        pclose(pp);
+        // pclose(pp);
         return output;
     }
     return NULL;
 }
 
 int * str_get_indexes(char *str,int c){
+    if(str==NULL) return NULL;
     int *indexes;
     indexes = (int*)malloc((strlen(str)+1)*sizeof(int));
     int i=0;
@@ -240,6 +242,7 @@ int * str_get_indexes(char *str,int c){
 }
 
 char * str_replace_all_char(char *str,int c1, int c2){
+    if(str==NULL) return NULL;
     char *new_str;
     new_str = (char*)malloc(strlen(str)+1);
     memcpy(new_str,str,strlen(str));
