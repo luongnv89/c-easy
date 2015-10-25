@@ -58,23 +58,28 @@
 
 char ** str_split(char * str, char * spliter){
     if(str != NULL && spliter !=NULL){
-        char * array_string[strlen(str)];
+        char *str_input = str;
+        char * array_string[strlen(str_input)];
         int start_index = 0;
         int s_index;
-        s_index = str_index(str,spliter);
+        s_index = str_index(str_input,spliter);
         int index_of_string = 0;
         while(s_index != -1){
-            char *new_string;
-            new_string = str_sub(str,start_index,s_index-1);
-            array_string[index_of_string] = new_string;
-            start_index = s_index + strlen(spliter);
-            index_of_string++;
-            s_index = str_index(str + start_index,spliter);
+            if(s_index == 0){
+                start_index = start_index + strlen(spliter);
+            }else{
+                char *new_string;
+                new_string = str_sub(str_input,start_index,s_index-1);
+                array_string[index_of_string] = new_string;
+                start_index = s_index + strlen(spliter);
+                index_of_string++; 
+            }
+            s_index = str_index(str_input + start_index,spliter);   
         }
 
-        if(str + start_index != NULL){
+        if(str_input + start_index != NULL){
             char *last_string;
-            last_string = str_sub(str, start_index, strlen(str)-1);
+            last_string = str_sub(str_input, start_index, strlen(str_input)-1);
             array_string[index_of_string] = last_string;
         }
         array_string[index_of_string+1]=NULL;

@@ -128,6 +128,15 @@ void test_str_split(void){
    CU_ASSERT_STRING_EQUAL(array2[0],"Je ");
    CU_ASSERT_STRING_EQUAL(array2[1]," CUnit.");
    CU_ASSERT_PTR_NULL(array[2]);
+
+   char ** array4 = str_split(str,"CUnit.");
+   CU_ASSERT_STRING_EQUAL(array4[0],"Je suis ");
+   CU_ASSERT_PTR_NULL(array4[1]);
+
+   
+   char ** array3 = str_split(str,"Je");
+   CU_ASSERT_STRING_EQUAL(array3[0]," suis CUnit.");
+   CU_ASSERT_PTR_NULL(array3[1]);
 }
 
 void test_cmd_run_command(void){
