@@ -69,9 +69,9 @@ char ** str_split(char * str, char * spliter){
                 start_index = start_index + strlen(spliter);
             }else{
                 char *new_string;
-                new_string = str_sub(str_input,start_index,s_index-1);
+                new_string = str_sub(str_input,start_index,start_index + s_index-1);
                 array_string[index_of_string] = new_string;
-                start_index = s_index + strlen(spliter);
+                start_index = start_index + s_index + strlen(spliter);
                 index_of_string++; 
             }
             s_index = str_index(str_input + start_index,spliter);   

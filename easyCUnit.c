@@ -133,10 +133,22 @@ void test_str_split(void){
    CU_ASSERT_STRING_EQUAL(array4[0],"Je suis ");
    CU_ASSERT_PTR_NULL(array4[1]);
 
-   
+
    char ** array3 = str_split(str,"Je");
    CU_ASSERT_STRING_EQUAL(array3[0]," suis CUnit.");
    CU_ASSERT_PTR_NULL(array3[1]);
+
+   char * test1 = "Je Je Je suis CUnit. Je t'aime.";
+   char ** array_test1 = str_split(test1,"Je ");
+   CU_ASSERT_STRING_EQUAL(array_test1[0],"suis CUnit. ");
+   CU_ASSERT_STRING_EQUAL(array_test1[1],"t'aime.");
+   CU_ASSERT_PTR_NULL(array_test1[2]);
+
+   char * test2 = "Je suis CUnit. C'est CUnit.CUnit.";
+   char ** array_test2 = str_split(test2,"CUnit.");
+   CU_ASSERT_STRING_EQUAL(array_test2[0],"Je suis ");
+   CU_ASSERT_STRING_EQUAL(array_test2[1]," C'est ");
+   CU_ASSERT_PTR_NULL(array_test2[2]);
 }
 
 void test_cmd_run_command(void){
