@@ -38,9 +38,7 @@
  char * str_combine(char * str1, char * str2){
  	char * comb;
     int len = 0;
- 	if(str1 == NULL && str2 == NULL){
- 		comb == NULL;
- 	}else if(str1 == NULL && str2 != NULL) {
+ 	if(str1 == NULL && str2 != NULL) {
         len = strlen(str2);
  		comb = (char *)malloc(len + 1);
  		memcpy(comb,str2,len);
@@ -49,7 +47,7 @@
         len = strlen(str1);
  		comb = (char *)malloc(len + 1);
  		strcpy(comb,str1);
- 	}else{
+ 	}else if(str2 != NULL && str1 != NULL){
         len = strlen(str1) + strlen(str2);
  		comb = (char*)malloc(len + 1);
  		strcpy(comb,str1);
@@ -59,10 +57,8 @@
  }
 
 char ** str_split(char * str, char * spliter){
-
     if(str != NULL && spliter !=NULL){
-        char * array_string[255];
-
+        char * array_string[strlen(str)];
         int start_index = 0;
         int s_index;
         s_index = str_index(str,spliter);
@@ -89,7 +85,7 @@ char ** str_split(char * str, char * spliter){
  }
 
 
- int str_replace(char * str, char * str1, char * rep){
+ char * str_replace(char * str, char * str1, char * rep){
  	if(str != NULL && str1 != NULL && rep !=NULL){
  		char * new_string;
 	 	char ** array_string;
@@ -101,15 +97,15 @@ char ** str_split(char * str, char * spliter){
 	 		size += sizeof(rep);
 	 		i++;
 	 	}
-	 	i=0;
+	 	int j=0;
 	 	new_string = (char *)malloc(size);
-	 	while(array_string[i] !=NULL){
-	 		strcat(new_string,array_string[i]);
-	 		i++;
+	 	while(array_string[j] !=NULL){
+	 		strcat(new_string,array_string[j]);
+	 		j++;
 	 	}
 	 	return new_string;	
  	}
- 	return 0;
+ 	return NULL;
  	
  }
 

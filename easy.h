@@ -52,6 +52,7 @@
  * @return         An array of string
  *                 NULL if @str or @spliter is(are) NULL
  *                 Array with only 1 element if @spliter does not exists in @str
+ *                 Array with only 1 element if @spliter is at the beginning or the end of string
  */
  char ** str_split(char * str, char * spliter); // Passed
  
@@ -64,7 +65,7 @@
  * @return          1: if replacing is successful -> @str will become a new string with all substring @str1 are replaced by @rep
  *                  0: if replacing is not successful
  */
- int str_replace(char * str, char * str1, char * rep);
+ char * str_replace(char * str, char * str1, char * rep);
 
 
 /**

@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "CUnit/Basic.h"
-// #include "CUnit/CUnit.h"
+#include "CUnit/CUnit.h"
 #include "easy.h"
 
 /* Pointer to the file used by the tests. */
@@ -128,7 +128,6 @@ void test_str_split(void){
    CU_ASSERT_STRING_EQUAL(array2[0],"Je ");
    CU_ASSERT_STRING_EQUAL(array2[1]," CUnit.");
    CU_ASSERT_PTR_NULL(array[2]);
-
 }
 
 void test_cmd_run_command(void){
@@ -142,51 +141,47 @@ void test_cmd_run_command(void){
  */
 int main()
 {
-   CU_pSuite pSuite_string = NULL;
-   CU_pSuite pSuite_cmd = NULL;
-
    /* initialize the CUnit test registry */
    if (CUE_SUCCESS != CU_initialize_registry())
       return CU_get_error();
 
-   /* add a suite to the registry */
-   pSuite_string = CU_add_suite("c-easy: working with string", init_suite1, clean_suite1);
-   if (NULL == pSuite_string) {
+   // TEST STRING FUNCTIONS
+   CU_TestInfo test_strings[]={
+      {"test of str_compare()", test_str_compare},
+      {"test of str_index", test_str_index},
+      {"test of str_sub", test_str_sub},
+      {"test of str_combine", test_str_combine},
+      {"test of str_get_indexes", test_str_get_indexes},
+      {"test of str_replace_all_char", test_str_replace_all_char},
+      {"test of str_print_array", test_str_print_array},
+      {"test of str_split", test_str_split},
+      CU_TEST_INFO_NULL,
+   };
+
+   // TEST COMMAND FUNCTIONS
+   CU_TestInfo test_cmds[]={
+      {"test of cmd_run_command()", test_cmd_run_command},
+      CU_TEST_INFO_NULL,
+   };
+
+   // SUITES
+   CU_SuiteInfo suites[]={
+      {"c-easy: working with command", init_suite1, clean_suite1,test_cmds},
+      {"c-easy: working with string", init_suite1, clean_suite1,test_strings},
+      CU_SUITE_INFO_NULL,
+   };
+
+   // REGISTER SUITES
+   CU_ErrorCode error = CU_register_suites(suites);
+   if(error!=CUE_SUCCESS){
+      printf("%d\n", error);
+      CU_cleanup_registry();
+      return CU_get_error();
+   }else{
+       /* Run all tests using the CUnit Basic interface */
+      CU_basic_set_mode(CU_BRM_VERBOSE);
+      CU_basic_run_tests();
       CU_cleanup_registry();
       return CU_get_error();
    }
-
-   pSuite_cmd = CU_add_suite("c-easy: working with command", init_suite1, clean_suite1);
-   if (NULL == pSuite_cmd) {
-      CU_cleanup_registry();
-      return CU_get_error();
-   }
-
-   /* add the tests to the suite */   
-   if ((NULL == CU_add_test(pSuite_string, "test of str_compare()", test_str_compare))||
-       (NULL == CU_add_test(pSuite_string, "test of str_index", test_str_index))||
-       (NULL == CU_add_test(pSuite_string, "test of str_sub", test_str_sub))||
-       (NULL == CU_add_test(pSuite_string, "test of str_combine", test_str_combine))||
-       (NULL == CU_add_test(pSuite_string, "test of str_get_indexes", test_str_get_indexes))||
-       (NULL == CU_add_test(pSuite_string, "test of str_replace_all_char", test_str_replace_all_char))||
-       (NULL == CU_add_test(pSuite_string, "test of str_print_array", test_str_print_array))||
-       (NULL == CU_add_test(pSuite_string, "test of str_split", test_str_split)))
-   {
-      CU_cleanup_registry();
-      return CU_get_error();
-   }
-
-     /* add the tests to the suite */   
-   if (NULL == CU_add_test(pSuite_cmd, "test of cmd_run_command()", test_cmd_run_command))
-   {
-      CU_cleanup_registry();
-      return CU_get_error();
-   }
-
-   /* Run all tests using the CUnit Basic interface */
-   CU_basic_set_mode(CU_BRM_VERBOSE);
-   CU_basic_run_tests();
-   CU_cleanup_registry();
-   return CU_get_error();
 }
-
