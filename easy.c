@@ -22,17 +22,20 @@
  }
 	
  char * str_sub(char * str, int start_index, int end_index){
- 	if(str != NULL && start_index >= 0 && end_index > start_index){
- 		if(end_index >= strlen(str)) return NULL;
- 		int len = end_index - start_index + 1;
-        char * sub;
- 		sub = (char *)malloc(len + 1);
- 		memcpy(sub,(str + start_index), len);
-        sub[len]='\0';
- 		return sub;
- 	}
- 	return NULL;
- 	
+    if(str == NULL) return NULL;
+
+    if(start_index < 0) return NULL;
+
+    if(end_index >= strlen(str)) return NULL;
+
+    if( start_index >= end_index) return NULL;
+
+ 	int len = end_index - start_index + 1;
+    char * sub;
+ 	sub = (char *)malloc(len + 1);
+ 	memcpy(sub,(str + start_index), len);
+    sub[len]='\0';
+ 	return sub;
  }
 
  char * str_combine(char * str1, char * str2){
@@ -115,36 +118,32 @@ char ** str_split(char * str, char * spliter){
  }
 
  char * str_subvalue(char *str, char* begin, char * end){
-    if(str != NULL && begin !=NULL && end != NULL){
-        char *fromBegin;
-        fromBegin = (char*)malloc(sizeof(str));
+    if(str == NULL) return NULL;
+    
+    if(begin == NULL && end == NULL) return NULL;
 
-        fromBegin = strstr(str,begin);
-        fromBegin = fromBegin + strlen(begin);
+    int begin_index = str_index(str,begin);
+    int end_index = str_index(str,end);
 
-        if(fromBegin == NULL){
-            return NULL;
-        }else{
-            char * endOfLine;
-            endOfLine = (char*)malloc(sizeof(fromBegin));
-
-            endOfLine = strstr(fromBegin,end);
-
-            if(endOfLine == NULL){
-                return NULL;
-            }else{
-                int len;
-                len = strlen(fromBegin)-strlen(endOfLine);
-                char *ret;
-                ret = (char * )malloc((len+1)*sizeof(char));
-                strncpy(ret,fromBegin,len);
-                ret[len]='\0';
-                return ret;
-            }
-
-        }
+    if(begin == NULL){
+        return str_sub(str,0,end_index - 1);
     }
-    return NULL;
+
+    if(end == NULL){
+        return str_sub(str,begin_index + strlen(begin),strlen(str)-1);
+    }
+    
+
+    if(begin_index == -1 ) return NULL;
+
+    
+    if(end_index == -1) return NULL;
+
+    if(begin_index + strlen(begin) >= end_index) return NULL;
+
+    int start_index = begin_index + strlen(begin);
+
+    return str_sub(str,start_index,end_index - 1);
 }
 
 char * str_subend(char *str, char* begin){

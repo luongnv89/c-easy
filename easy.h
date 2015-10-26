@@ -20,7 +20,10 @@
   * @param  str    big string
   * @param  substr substring to find the index
   * @return        -1: if @substr is not a substring of string @str
+  *                    if @str1 is NULL
+  *                    if @str2 is NULL
   *               >=0: index of @substr in @str
+  *               
   */
  int str_index(char * str, char *  substr); // Passed
 
@@ -29,8 +32,11 @@
   * @param  str         String to get substring from
   * @param  start_index The starting index to get string (>=0)
   * @param  end_index   The ending index of string (< length of @str)
-  * @return             NULL: if the input index is invalid
-  *                     a new string which is the substring of @str from @start_index to @end_index
+  * @return             NULL: if @str is NULL
+  *                           if @start_index <0
+  *                           if @end_index >= length of @str
+  *                           if @start_index >= @end_index
+  *                     a new string which is the substring of @str from @start_index to @end_index (counts both 2 characters at index @start_index and @end_index)
   */		
  char * str_sub(char * str, int start_index, int end_index); // Passed
 
@@ -71,28 +77,20 @@
 /**
 * Get a substring between 2 substrings
 * @param  str     big string
-* @param  begin   substring begin of value
-* @param  end     substring end of value
+* @param  begin   substring begin of value (the first appears in @str)
+* @param  end     substring end of value (the first appears in @str)
 * @return         substring between 2 substring
-* Example:
-* str = "I am the powest hero";
-* begin = "am ";
-* end = " hero";
-* return should be: "the powest"
+*                 if @end is NULL then return substring from @begin to the end of string
+*                 if @begin is NULL then return substring from beginning to the string @end
+*                 return NULL if: 
+*                   @str  is NULL
+*                   @begin is not a substring of @str
+*                   @end is not a substring of @str
+*                   @begin and @end are NULL
+*                   @begin and @end are overlap or next each other in @str
+*                   @begin is after @end in @str
 */
-char * str_subvalue(char *str, char* begin, char * end);
-
-/**
- * Get a substring of a string, start from a substring
- * @param  str   Big string
- * @param  begin String to start
- * @return       substring from string @begin to end of string (not include string @begin)
- * Example:
- * str = "I am the powest hero";
- * begin = "am ";
- * return should be: "the powest hero"
- */
-char * str_subend(char *str, char* begin);
+char * str_subvalue(char *str, char* begin, char * end); // Passed
 
 /**
  * Add a string into an array of string. New string will be filled in the first NULL element of array

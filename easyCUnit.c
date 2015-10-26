@@ -63,16 +63,24 @@ void test_str_index(void){
    char * str3 = "Hola";
    CU_ASSERT(str_index(str1,str2)>0);
    CU_ASSERT(str_index(str1,str3)==-1);
+   CU_ASSERT(str_index(str1,NULL)==-1);
+   CU_ASSERT(str_index(NULL,str3)==-1);
 }
 
 /**
  * Test str_sub
  */
 void test_str_sub(void){
-   CU_ASSERT_PTR_NOT_NULL(str_sub(str,1,5));
-   CU_ASSERT_PTR_NOT_NULL(str_sub(str,0,5));
-   CU_ASSERT_PTR_NULL(str_sub(str,1,199));
+   CU_ASSERT_PTR_NULL(str_sub(NULL,1,3));
    CU_ASSERT_PTR_NULL(str_sub(str,-1,5));
+   CU_ASSERT_PTR_NULL(str_sub(str,1,199));
+   CU_ASSERT_PTR_NULL(str_sub(str,3,3));
+   CU_ASSERT_PTR_NULL(str_sub(str,4,3));
+
+   CU_ASSERT_STRING_EQUAL(str_sub(str,1,5),"e sui");   
+   CU_ASSERT_STRING_EQUAL(str_sub(str,0,5),"Je sui");
+   CU_ASSERT_STRING_EQUAL(str_sub(str,2,strlen(str)-1)," suis CUnit.");
+   CU_ASSERT_STRING_EQUAL(str_sub(str,0,strlen(str)-1),"Je suis CUnit.");
 }
 
 void test_str_combine(void){
@@ -151,6 +159,23 @@ void test_str_split(void){
    CU_ASSERT_PTR_NULL(array_test2[2]);
 }
 
+
+void test_str_subvalue(void){
+   //NULL return
+   CU_ASSERT_PTR_NULL(str_subvalue(NULL,"je","suis"));
+   CU_ASSERT_PTR_NULL(str_subvalue(str,"Paris","suis"));
+   CU_ASSERT_PTR_NULL(str_subvalue(str,"Je","aux"));
+   CU_ASSERT_PTR_NULL(str_subvalue(str,"suis","Je"));
+   CU_ASSERT_PTR_NULL(str_subvalue(str,NULL,NULL));
+   CU_ASSERT_PTR_NULL(str_subvalue(str,"Je ","suis"));
+   CU_ASSERT_PTR_NULL(str_subvalue(str,"Je s","suis"));
+
+
+   CU_ASSERT_STRING_EQUAL(str_subvalue(str,"Je",NULL)," suis CUnit.");
+   CU_ASSERT_STRING_EQUAL(str_subvalue(str,NULL,"CUnit."),"Je suis ");
+   CU_ASSERT_STRING_EQUAL(str_subvalue(str,"Je","CUnit.")," suis ");
+}
+
 void test_cmd_run_command(void){
    CU_ASSERT_PTR_NOT_NULL(cmd_run_command("ls -ll"));
    CU_ASSERT_PTR_NOT_NULL(cmd_run_command("uname -a"));
@@ -168,7 +193,7 @@ int main()
 
    // TEST STRING FUNCTIONS
    CU_TestInfo test_strings[]={
-      {"test of str_compare()", test_str_compare},
+      {"test of str_compare", test_str_compare},
       {"test of str_index", test_str_index},
       {"test of str_sub", test_str_sub},
       {"test of str_combine", test_str_combine},
@@ -176,6 +201,7 @@ int main()
       {"test of str_replace_all_char", test_str_replace_all_char},
       {"test of str_print_array", test_str_print_array},
       {"test of str_split", test_str_split},
+      {"test of str_subvalue", test_str_subvalue},
       CU_TEST_INFO_NULL,
    };
 
