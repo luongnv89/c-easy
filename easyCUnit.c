@@ -5,8 +5,10 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "CUnit/Basic.h"
 #include "CUnit/CUnit.h"
+#include "CUnit/Basic.h"
+#include "CUnit/Console.h"
+#include "CUnit/Automated.h"
 #include "easy.h"
 
 /* Pointer to the file used by the tests. */
@@ -250,9 +252,18 @@ int main()
       CU_cleanup_registry();
       return CU_get_error();
    }else{
-       /* Run all tests using the CUnit Basic interface */
+      
+      /* Run all tests using the CUnit Basic interface */
       CU_basic_set_mode(CU_BRM_VERBOSE);
       CU_basic_run_tests();
+      
+      /* Console */
+      // CU_console_run_tests();
+
+      /* Automated_run_tests */
+      // CU_automated_run_tests();
+
+
       CU_cleanup_registry();
       return CU_get_error();
    }
