@@ -5,18 +5,22 @@
 #include "easy.h"
 
  int str_compare(char * str1, char * str2){
- 	if(str1!=NULL && str2!=NULL){
- 		return strcmp(str1,str2)==0;	
+
+ 	if(str1 == NULL && str2 == NULL) return 1;
+
+    if(str1!=NULL && str2!=NULL){
+ 		return strcmp(str1,str2)==0;
  	}
  	return 0;
  }
 
  int str_index(char * str, char *  substr){
+
  	if(str!=NULL && substr!=NULL){
  		char *p_index;
 	 	p_index = strstr(str,substr);
-	 	if(p_index==NULL) return -1;
-	 	return (strlen(str)-strlen(p_index));	
+	 	if(p_index == NULL) return -1;
+	 	return (strlen(str)-strlen(p_index));
  	}
  	return -1;
  }
@@ -41,6 +45,8 @@
  char * str_combine(char * str1, char * str2){
  	char * comb;
     int len = 0;
+    if(str2 == NULL && str1 == NULL) return NULL;
+
  	if(str1 == NULL && str2 != NULL) {
         len = strlen(str2);
  		comb = (char *)malloc(len + 1);
@@ -50,7 +56,7 @@
         len = strlen(str1);
  		comb = (char *)malloc(len + 1);
  		strcpy(comb,str1);
- 	}else if(str2 != NULL && str1 != NULL){
+ 	}else {
         len = strlen(str1) + strlen(str2);
  		comb = (char*)malloc(len + 1);
  		strcpy(comb,str1);
@@ -92,29 +98,81 @@ char ** str_split(char * str, char * spliter){
     
  }
 
+int * str_get_indexes(char *str, char* str1){
+    if(str ==  NULL || str1 == NULL) return NULL;
+
+    int str1_index = str_index(str,str1);
+    if(str1_index == -1) return NULL;
+
+    int *indexes;
+    indexes = (int*)malloc((strlen(str)+1)*sizeof(int));
+
+    int start_index = 0;
+    int current_index = 0;
+    while(str1_index != -1){
+        indexes[current_index] = start_index + str1_index;
+        start_index = start_index + str1_index + strlen(str1);
+        str1_index = str_index(str + start_index,str1);
+        current_index++;
+    }
+
+    indexes[current_index]=-1;
+    return indexes;
+}
+
 
  char * str_replace(char * str, char * str1, char * rep){
- 	if(str != NULL && str1 != NULL && rep !=NULL){
- 		char * new_string;
-	 	char ** array_string;
-	 	array_string = str_split(str,str1);
-	 	int i=0;
-	 	int size = 0;
-	 	while(array_string[i] !=NULL){
-	 		size += sizeof(array_string[i]);
-	 		size += sizeof(rep);
-	 		i++;
-	 	}
-	 	int j=0;
-	 	new_string = (char *)malloc(size);
-	 	while(array_string[j] !=NULL){
-	 		strcat(new_string,array_string[j]);
-	 		j++;
-	 	}
-	 	return new_string;	
- 	}
- 	return NULL;
- 	
+
+    if(str == NULL) return NULL;
+
+    if(str1 == NULL || rep == NULL) return str;
+
+    int * array_index = str_get_indexes(str,str1);
+
+    if(array_index == NULL) return str;
+
+    int current_index = 0;
+
+    int nb_element =0;
+    while(array_index[nb_element] != -1){
+        nb_element++;
+    }
+
+    int new_string_len = strlen(str) + nb_element * strlen(rep) - nb_element * strlen(str1)+1;
+    char * new_string;
+    new_string = (char * )malloc(new_string_len);
+
+    if(array_index[current_index] != 0){
+        char * str_substr = str_sub(str,0,array_index[current_index]-1);
+        strcpy(new_string,str_substr);
+    }
+
+    while(array_index[current_index + 1] != -1){
+
+        char * str_substr = str_sub(str,array_index[current_index] + strlen(str1),array_index[current_index + 1] -1);
+        
+        if(strlen(new_string)==0){
+            strcpy(new_string,rep);
+        }else{
+            strcat(new_string,rep);
+        }
+        strcat(new_string,str_substr);
+        current_index ++;
+    }
+
+    // The spliter is at the end of string
+    if(strlen(str) >= array_index[current_index] + strlen(str1)){
+        char * str_substr = str_sub(str,array_index[current_index] + strlen(str1),strlen(str) -1);
+        strcat(new_string,rep);    
+        if(str_substr != NULL){
+            strcat(new_string,str_substr);
+        }
+    }
+
+    new_string[new_string_len-1] = '\0';
+
+    return new_string;
+
  }
 
  char * str_subvalue(char *str, char* begin, char * end){
@@ -146,39 +204,29 @@ char ** str_split(char * str, char * spliter){
     return str_sub(str,start_index,end_index - 1);
 }
 
-char * str_subend(char *str, char* begin){
-	if(str != NULL && begin !=NULL){
-        char *fromBegin;
-        fromBegin = (char*)malloc(sizeof(str));
+char ** str_add_string_to_array(char **array,char *str){
+  
+  if(str == NULL) return array;
 
-        fromBegin = strstr(str,begin);
-        fromBegin = fromBegin + strlen(begin);
+  char * new_str;
+  new_str = (char * )malloc(strlen(str)+1);
+  memcpy(new_str,str,strlen(str));
+  new_str[strlen(str)] = '\0';
 
-        if(fromBegin == NULL){
-            return NULL;
-        }else{
-            int len;
-            len = strlen(fromBegin);
-            char *ret;
-            ret = (char * )malloc((len+1)*sizeof(char));
-            strncpy(ret,fromBegin,len);
-            ret[len]='\0';
-            return ret;
-        }
-    }
-    return NULL;
-}
+  if(array == NULL){
+    array = (char**)malloc(C_EASY_STR_MAX_ARRAY_SIZE);
+    array[0] = new_str;
+    array[1] = NULL;
+    return array;
+  }
 
-char ** str_add_new_string(char **array,char *str){
-  if(str == NULL) return 0;
   int i=0;
   while(array[i] != NULL){
     i++;
   }
-
-  array[i] = (char*)malloc(strlen(str)+1);
-  strcpy(array[i],str);
-  array[i][strlen(array[i])]='\0';
+  // realloc(array,i+1);
+  array[i] = new_str;
+  array[i+1] = NULL;
   return array;
 }
 
@@ -223,46 +271,4 @@ char * cmd_run_command(char *cmd){
         return output;
     }
     return NULL;
-}
-
-int * str_get_indexes(char *str,int c){
-    if(str==NULL) return NULL;
-    int *indexes;
-    indexes = (int*)malloc((strlen(str)+1)*sizeof(int));
-    int i=0;
-    int current_index = 0;
-    for(i=0;i<strlen(str);i++){
-        if((int)str[i]==c){
-            indexes[current_index]=i;
-            current_index++;
-        }
-    }
-    indexes[current_index]=-1;
-    return indexes;
-}
-
-char * str_replace_all_char(char *str,int c1, int c2){
-    if(str==NULL) return NULL;
-    char *new_str;
-    new_str = (char*)malloc(strlen(str)+1);
-    memcpy(new_str,str,strlen(str));
-    new_str[strlen(str)] = '\0';
-    int i;
-    for(i=0;i<strlen(str);i++){
-        if((int)new_str[i]==c1){
-            new_str[i]=(char)c2;
-        }
-    }
-    return new_str;
-}
-
-char * str_sub_index(char *str, int start, int end){
-    
-    int len = end - start-1;
-
-    char *substr;
-    substr = (char*)malloc(len);
-    memcpy(substr,str + start + 1,len);
-    substr[len]='\0';
-    return substr;    
 }

@@ -6,12 +6,19 @@
  #include <stdlib.h>
  #include <stdio.h>
  #include <string.h>
+
+ #define C_EASY_STR_MAX_ARRAY_SIZE 255
 /**
  * Compare 2 strings
  * @param  str1 String 1
  * @param  str2 The second string
- * @return      1: if two strings are equal
- *              0: two string are not equal
+ * @return      0 if:
+ *                  @str1 is NULL and @str2 is not NULL
+ *                  @str1 is not NULL and @str2 is NULL
+ *                  @str1 does not equal @str2
+ *              1 if:
+ *                  @str1 and @str2 are NULL
+ *                  @str1 equals @str2
  */
  int str_compare(char * str1, char * str2); // Passed
 
@@ -62,16 +69,32 @@
  */
  char ** str_split(char * str, char * spliter); // Passed
  
+ /**
+ * Get all indexes of a string in a string
+ * @param  str string
+ * @param  str1   substring of @str
+ * @return     NULL if:
+ *                  @str is NULL
+ *                  @str1 is NULL
+ *                  @str1 does not belong to @str
+ *             an array of indexes of @str1 in @str
+ */
+int * str_get_indexes(char *str, char *str1); // Passed
 
 /**
  * Replace a substring by another substring in a string
  * @param  str      big string
  * @param  str1     substring is going to be replaced
  * @param  rep replacing string
- * @return          1: if replacing is successful -> @str will become a new string with all substring @str1 are replaced by @rep
- *                  0: if replacing is not successful
+ * @return          NULL if:
+ *                       @str is NULL
+ *                  @str if :
+ *                       @str1 is NULL
+ *                       @str1 does not belong to @str
+ *                       @rep is NULL
+ *                  new value of @str with all the @str1 are replaced by @rep
  */
- char * str_replace(char * str, char * str1, char * rep);
+ char * str_replace(char * str, char * str1, char * rep); // Passed
 
 
 /**
@@ -96,17 +119,17 @@ char * str_subvalue(char *str, char* begin, char * end); // Passed
  * Add a string into an array of string. New string will be filled in the first NULL element of array
  * @param  array Array of string
  * @param  str   String to add
- * @return       new array of string
- *               old array of string if the adding is not successful
+ * @return       if @str is NULL return array
+ *               if @array is NULL return new array with @str is the first element
+ *               new array with the @str is added to the first NULL element in array (not at the end of array)
  */
-char ** str_add_new_string(char **array,char *str);
+char ** str_add_string_to_array(char **array,char *str); // Passed
 
 /**
  * Print string in an array of string until the first NULL element;
  * @param array array string
  */
 void str_print_array(char **array); // Passed
-
 
 /**
  * Executes a command in linux and return the output
@@ -115,20 +138,3 @@ void str_print_array(char **array); // Passed
  */
 char * cmd_run_command(char *cmd); // Passed
 
-
-/**
- * Get all indexes of a character in a string
- * @param  str string
- * @param  c   ascii code number of character
- * @return     an integer array which contains the list of indexes of character in string
- */
-int * str_get_indexes(char *str, int c); // Passed
-
-/**
- * Replace a character by another character in all string
- * @param  str string
- * @param  c1  ascii code number of character will be replaced
- * @param  c2  ascii code number of replacing character
- * @return     new string after replacing
- */
-char * str_replace_all_char(char *str,int c1, int c2); // Passed

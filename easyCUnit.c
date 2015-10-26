@@ -20,12 +20,7 @@ static char * str0 = " Je t'aime";
  */
 int init_suite1(void)
 {
-   // if (NULL == (temp_file = fopen("temp.txt", "w+"))) {
-      // return -1;
-   // }
-   // else {
       return 0;
-   // }
 }
 
 /* The suite cleanup function.
@@ -34,37 +29,35 @@ int init_suite1(void)
  */
 int clean_suite1(void)
 {
-   // if (0 != fclose(temp_file)) {
-      // return -1;
-   // }
-   // else {
-      // temp_file = NULL;
       return 0;
-   // }
 }
 
 /**
  * Test str_compare
  */
 void test_str_compare(void){
-   char * str1 = "Nguyen";
-   char * str2 = "Luong";
-   CU_TEST(1==str_compare(str1,str1));
-   CU_TEST(1==str_compare(str2,str2));
-   CU_TEST(0==str_compare(str1,str2));
+   CU_ASSERT_EQUAL(0,str_compare(NULL,"Je"));
+   CU_ASSERT_EQUAL(0,str_compare("Je",NULL));
+   CU_ASSERT_EQUAL(0,str_compare("Je","suis"));
+   CU_ASSERT_EQUAL(0,str_compare(str,str0));
+
+   CU_ASSERT_EQUAL(1,str_compare(NULL,NULL));
+   CU_ASSERT_EQUAL(1,str_compare(str,str));
+   CU_ASSERT_EQUAL(1,str_compare(str0,str0));
 }
 
 /**
  * Test str_index
  */
 void test_str_index(void){
-   char * str1 = "Je suis CUNIT";
-   char * str2 = "suis";
-   char * str3 = "Hola";
-   CU_ASSERT(str_index(str1,str2)>0);
-   CU_ASSERT(str_index(str1,str3)==-1);
-   CU_ASSERT(str_index(str1,NULL)==-1);
-   CU_ASSERT(str_index(NULL,str3)==-1);
+   CU_ASSERT_EQUAL(-1,str_index(NULL,NULL));
+   CU_ASSERT_EQUAL(-1,str_index(str,NULL));
+   CU_ASSERT_EQUAL(-1,str_index(NULL,"suis"));
+   CU_ASSERT_EQUAL(-1,str_index(str,"Paris"));
+
+   CU_ASSERT_EQUAL(0,str_index(str,"Je"));
+   CU_ASSERT_EQUAL(3,str_index(str,"suis"));
+   CU_ASSERT_EQUAL(8,str_index(str,"CUnit."));
 }
 
 /**
@@ -84,43 +77,13 @@ void test_str_sub(void){
 }
 
 void test_str_combine(void){
-   char * str4 = "Je suis CUnit. Je t'aime";
 
    CU_ASSERT_PTR_NULL(str_combine(NULL,NULL));
 
-   CU_ASSERT_STRING_EQUAL(str4,str_combine(str,str0));
    CU_ASSERT_STRING_EQUAL(str,str_combine(str,NULL));
    CU_ASSERT_STRING_EQUAL(str0,str_combine(NULL,str0));
-}
-
-
-void test_str_get_indexes(void){
-   int * array = str_get_indexes(str,'i');
-   int * array2 = str_get_indexes(str,'w');
-   CU_ASSERT_EQUAL(5,array[0]);
-   CU_ASSERT_EQUAL(11,array[1]);
-   CU_ASSERT_EQUAL(-1,array[2]);
-   CU_ASSERT_EQUAL(-1,array2[0]);
-   CU_ASSERT_PTR_NULL(str_get_indexes(NULL,'c'));
-}
-
-void test_str_replace_all_char(void){
-   CU_ASSERT_STRING_EQUAL(str_replace_all_char(str,'J','Z'),"Ze suis CUnit.");
-   CU_ASSERT_STRING_EQUAL(str_replace_all_char(str,'Z','a'),str);
-   CU_ASSERT_PTR_NULL(str_replace_all_char(NULL,'Z','a'));
-}
-
-void test_str_print_array(void){
-   char * array[5];
-   array[0]="Je";
-   array[1]=" suis";
-   array[2]=" CUnit";
-   array[3]=". ";
-   array[4]=" Bonjour!";
-   array[5]=" Enchantez";
-   printf("\n");
-   str_print_array(array);
-   printf("\n");
+   CU_ASSERT_STRING_EQUAL("Je suis CUnit. Je t'aime",str_combine(str,str0));
+   CU_ASSERT_STRING_EQUAL(" Je t'aimeJe suis CUnit.",str_combine(str0,str));
 }
 
 void test_str_split(void){
@@ -146,19 +109,48 @@ void test_str_split(void){
    CU_ASSERT_STRING_EQUAL(array3[0]," suis CUnit.");
    CU_ASSERT_PTR_NULL(array3[1]);
 
-   char * test1 = "Je Je Je suis CUnit. Je t'aime.";
-   char ** array_test1 = str_split(test1,"Je ");
+   char ** array_test1 = str_split("Je Je Je suis CUnit. Je t'aime.","Je ");
    CU_ASSERT_STRING_EQUAL(array_test1[0],"suis CUnit. ");
    CU_ASSERT_STRING_EQUAL(array_test1[1],"t'aime.");
    CU_ASSERT_PTR_NULL(array_test1[2]);
 
-   char * test2 = "Je suis CUnit. C'est CUnit.CUnit.";
-   char ** array_test2 = str_split(test2,"CUnit.");
+   char ** array_test2 = str_split("Je suis CUnit. C'est CUnit.CUnit.","CUnit.");
    CU_ASSERT_STRING_EQUAL(array_test2[0],"Je suis ");
    CU_ASSERT_STRING_EQUAL(array_test2[1]," C'est ");
    CU_ASSERT_PTR_NULL(array_test2[2]);
 }
 
+void test_str_get_indexes(void){
+   
+   CU_ASSERT_PTR_NULL(str_get_indexes(NULL,NULL));
+   CU_ASSERT_PTR_NULL(str_get_indexes(str,NULL));
+   CU_ASSERT_PTR_NULL(str_get_indexes(NULL,"suis"));
+   CU_ASSERT_PTR_NULL(str_get_indexes(str,"Paris"));
+   // Je suis CUnit.
+   CU_ASSERT_EQUAL(str_get_indexes(str,"s")[0],3);
+   CU_ASSERT_EQUAL(str_get_indexes(str,"s")[1],6);
+   CU_ASSERT_EQUAL(str_get_indexes(str,"s")[2],-1);
+
+   CU_ASSERT_EQUAL(str_get_indexes(str,"J")[0],0);
+   CU_ASSERT_EQUAL(str_get_indexes(str,"J")[1],-1);
+
+   CU_ASSERT_EQUAL(str_get_indexes(str,"CUnit.")[0],8);
+   CU_ASSERT_EQUAL(str_get_indexes(str,"CUnit.")[1],-1);
+}
+
+
+void test_str_replace(void){
+   CU_ASSERT_PTR_NULL(str_replace(NULL,"je","suis"));
+
+   CU_ASSERT_STRING_EQUAL(str_replace(str,"Je",NULL),str);
+   CU_ASSERT_STRING_EQUAL(str_replace(str,NULL,"Paris"),str);
+   CU_ASSERT_STRING_EQUAL(str_replace(str,"Paris","suis"),str);
+
+   CU_ASSERT_STRING_EQUAL(str_replace(str,"suis","sera"),"Je sera CUnit.");
+   CU_ASSERT_STRING_EQUAL(str_replace(str,"Je suis","Tu es"),"Tu es CUnit.");
+   CU_ASSERT_STRING_EQUAL(str_replace(str,"CUnit.","Montimage."),"Je suis Montimage.");
+   CU_ASSERT_STRING_EQUAL(str_replace(str,"s","z"),"Je zuiz CUnit.");
+}
 
 void test_str_subvalue(void){
    //NULL return
@@ -174,6 +166,38 @@ void test_str_subvalue(void){
    CU_ASSERT_STRING_EQUAL(str_subvalue(str,"Je",NULL)," suis CUnit.");
    CU_ASSERT_STRING_EQUAL(str_subvalue(str,NULL,"CUnit."),"Je suis ");
    CU_ASSERT_STRING_EQUAL(str_subvalue(str,"Je","CUnit.")," suis ");
+}
+
+void test_str_add_string_to_array(void){
+   char ** array;
+   array = NULL;
+
+   CU_ASSERT_PTR_NULL(str_add_string_to_array(array,NULL));
+   // For the first element, need to assign the address for array pointer.
+   array = str_add_string_to_array(array,str);
+   CU_ASSERT_STRING_EQUAL(array[0],str);
+   CU_ASSERT_PTR_NULL(array[1]);
+
+   CU_ASSERT_STRING_EQUAL((str_add_string_to_array(array,NULL))[0],str);
+   CU_ASSERT_PTR_NULL((str_add_string_to_array(array,NULL))[1]);
+
+   CU_ASSERT_STRING_EQUAL((str_add_string_to_array(array,str0))[0],str);
+   CU_ASSERT_STRING_EQUAL(array[1],str0);
+   CU_ASSERT_PTR_NULL(array[2]);
+
+}
+
+void test_str_print_array(void){
+   char * array[5];
+   array[0]="Je";
+   array[1]=" suis";
+   array[2]=" CUnit";
+   array[3]=". ";
+   array[4]=" Bonjour!";
+   array[5]=" Enchantez";
+   printf("\n");
+   str_print_array(array);
+   printf("\n");
 }
 
 void test_cmd_run_command(void){
@@ -198,22 +222,23 @@ int main()
       {"test of str_sub", test_str_sub},
       {"test of str_combine", test_str_combine},
       {"test of str_get_indexes", test_str_get_indexes},
-      {"test of str_replace_all_char", test_str_replace_all_char},
       {"test of str_print_array", test_str_print_array},
       {"test of str_split", test_str_split},
       {"test of str_subvalue", test_str_subvalue},
+      {"test of str_replace", test_str_replace},
+      {"test of str_add_string_to_array", test_str_add_string_to_array},
       CU_TEST_INFO_NULL,
    };
 
    // TEST COMMAND FUNCTIONS
    CU_TestInfo test_cmds[]={
-      {"test of cmd_run_command()", test_cmd_run_command},
+      {"test of cmd_run_command", test_cmd_run_command},
       CU_TEST_INFO_NULL,
    };
 
    // SUITES
    CU_SuiteInfo suites[]={
-      {"c-easy: working with command", init_suite1, clean_suite1,test_cmds},
+      {"c-easy: working with command", NULL, NULL,test_cmds},
       {"c-easy: working with string", init_suite1, clean_suite1,test_strings},
       CU_SUITE_INFO_NULL,
    };
