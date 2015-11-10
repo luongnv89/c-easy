@@ -32,7 +32,7 @@
 
     if(end_index >= strlen(str)) return NULL;
 
-    if( start_index >= end_index) return NULL;
+    if( start_index > end_index) return NULL;
 
  	int len = end_index - start_index + 1;
     char * sub;
@@ -82,6 +82,7 @@ char ** str_split(char * str, char * spliter){
                 array_string[index_of_string] = new_string;
                 start_index = start_index + s_index + strlen(spliter);
                 index_of_string++; 
+                // free(new_string);
             }
             s_index = str_index(str_input + start_index,spliter);   
         }
@@ -90,6 +91,7 @@ char ** str_split(char * str, char * spliter){
             char *last_string;
             last_string = str_sub(str_input, start_index, strlen(str_input)-1);
             array_string[index_of_string] = last_string;
+            // free(last_string);
         }
         array_string[index_of_string+1]=NULL;
         return array_string;
@@ -117,7 +119,15 @@ int * str_get_indexes(char *str, char* str1){
     }
 
     indexes[current_index]=-1;
-    return indexes;
+
+    int *res;
+    res = (int*)malloc((current_index + 1)*sizeof(int));
+    int i = 0;
+    for(i = 0;i <current_index + 1;i++){
+        res[i]=indexes[i];
+    }
+    free(indexes);
+    return res;
 }
 
 
@@ -139,12 +149,13 @@ int * str_get_indexes(char *str, char* str1){
     }
 
     int new_string_len = strlen(str) + nb_element * strlen(rep) - nb_element * strlen(str1)+1;
-    char * new_string;
+    char * new_string = NULL;
     new_string = (char * )malloc(new_string_len);
 
     if(array_index[current_index] != 0){
         char * str_substr = str_sub(str,0,array_index[current_index]-1);
         strcpy(new_string,str_substr);
+        free(str_substr);
     }
 
     while(array_index[current_index + 1] != -1){
@@ -157,6 +168,7 @@ int * str_get_indexes(char *str, char* str1){
             strcat(new_string,rep);
         }
         strcat(new_string,str_substr);
+        free(str_substr);
         current_index ++;
     }
 
@@ -166,11 +178,14 @@ int * str_get_indexes(char *str, char* str1){
         strcat(new_string,rep);    
         if(str_substr != NULL){
             strcat(new_string,str_substr);
+            free(str_substr);
         }
     }
 
     new_string[new_string_len-1] = '\0';
 
+    free(array_index);
+    
     return new_string;
 
  }
@@ -204,30 +219,47 @@ int * str_get_indexes(char *str, char* str1){
     return str_sub(str,start_index,end_index - 1);
 }
 
-char ** str_add_string_to_array(char **array,char *str){
+// char ** str_add_string_to_array(char **array,char *str){
   
-  if(str == NULL) return array;
+//   if(str == NULL) return array;
 
-  char * new_str;
-  new_str = (char * )malloc(strlen(str)+1);
-  memcpy(new_str,str,strlen(str));
-  new_str[strlen(str)] = '\0';
+//   char * new_str;
+//   new_str = (char * )malloc(strlen(str)+1);
+//   memcpy(new_str,str,strlen(str));
+//   new_str[strlen(str)] = '\0';
 
-  if(array == NULL){
-    array = (char**)malloc(C_EASY_STR_MAX_ARRAY_SIZE);
-    array[0] = new_str;
-    array[1] = NULL;
-    return array;
-  }
+//   if(array == NULL){
+//     char ** ret = (char**)malloc(C_EASY_STR_MAX_ARRAY_SIZE);
+//     ret[0] = new_str;
+//     ret[1] = NULL;
+//     return ret;
+//   }
 
-  int i=0;
-  while(array[i] != NULL){
-    i++;
-  }
-  // realloc(array,i+1);
-  array[i] = new_str;
-  array[i+1] = NULL;
-  return array;
+//   int i=0;
+//   while(array[i] != NULL){
+//     i++;
+//   }
+//   // realloc(array,i+1);
+//   array[i] = new_str;
+//   array[i+1] = NULL;
+//   return array;
+// }
+
+char * str_copy(char *str2){
+    
+    char *str1 = NULL;
+    
+    if(str2 != NULL){
+        int length = strlen(str2);
+
+        str1 = malloc(length + 1);
+
+        memcpy(str1,str2,length);
+
+        str1[length] = '\0';
+    }
+    
+    return str1;
 }
 
 void str_print_array(char **array){
@@ -239,36 +271,37 @@ void str_print_array(char **array){
 }
 
 
-char * cmd_run_command(char *cmd){
-    if(cmd==NULL){
-        return NULL;
-    }else{
-        FILE *pp;
-        char *output;
-        output=(char*)malloc(255*sizeof(char));
-        pp = popen(cmd, "r");
-        if (pp != NULL) {
-            while (1) {
-                char *line;
-                char buf[255];
-                line = fgets(buf, sizeof(buf), pp);
-                if (line != NULL) {
-                    if(output==NULL){
-                        output=line;
-                    }else{
-                        int len = strlen(output)+strlen(line)+1; 
-                        output=realloc(output,len);
-                        strcat(output,line);
-                        output[len]='\0';    
-                    }
-                }else{
-                    // End of output
-                    break;
-                }
-            }
-        }
-        // pclose(pp);
-        return output;
-    }
-    return NULL;
-}
+// char * cmd_run_command(char *cmd){
+//     if(cmd==NULL){
+//         return NULL;
+//     }else{
+//         FILE *pp;
+//         char *output;
+//         output=(char*)malloc(255*sizeof(char));
+//         pp = popen(cmd, "r");
+//         if (pp != NULL) {
+//             char *line = NULL;
+//             while (1) {
+//                 char buf[255];
+//                 line = fgets(buf, sizeof(buf), pp);
+//                 if (line != NULL) {
+//                     if(output==NULL){
+//                         output=line;
+//                     }else{
+//                         int len = strlen(output)+strlen(line)+1; 
+//                         output=realloc(output,len);
+//                         strcat(output,line);
+//                         output[len]='\0';
+//                     }
+//                 }else{
+//                     // End of output
+//                     break;
+//                 }
+//             }
+//             if(line != NULL) free(line);
+//         }
+//         pclose(pp);
+//         return output;
+//     }
+//     return NULL;
+// }

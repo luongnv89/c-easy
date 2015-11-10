@@ -125,6 +125,14 @@ char * str_subvalue(char *str, char* begin, char * end); // Passed
  */
 char ** str_add_string_to_array(char **array,char *str); // Passed
 
+
+/**
+ * Copy a string
+ * @param str2 string to be coppied
+ * @return new string
+ */
+char* str_copy(char *str2);
+
 /**
  * Print string in an array of string until the first NULL element;
  * @param array array string
