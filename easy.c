@@ -135,12 +135,15 @@ int * str_get_indexes(char *str, char* str1){
 
     if(str == NULL) return NULL;
 
-    if(str1 == NULL || rep == NULL) return str;
+    if(str1 == NULL || rep == NULL) {
+        return str_copy(str);
+    }
 
     int * array_index = str_get_indexes(str,str1);
 
-    if(array_index == NULL) return str;
-
+    if(array_index == NULL) {
+        return str_copy(str);
+    }
     int current_index = 0;
 
     int nb_element =0;
@@ -149,8 +152,9 @@ int * str_get_indexes(char *str, char* str1){
     }
 
     int new_string_len = strlen(str) + nb_element * strlen(rep) - nb_element * strlen(str1)+1;
-    char * new_string = NULL;
+    char * new_string;
     new_string = (char * )malloc(new_string_len);
+    new_string[0] = '\0';
 
     if(array_index[current_index] != 0){
         char * str_substr = str_sub(str,0,array_index[current_index]-1);
@@ -219,31 +223,25 @@ int * str_get_indexes(char *str, char* str1){
     return str_sub(str,start_index,end_index - 1);
 }
 
-// char ** str_add_string_to_array(char **array,char *str){
+char ** str_add_string_to_array(char **array,char *str){
   
-//   if(str == NULL) return array;
+  if(str == NULL) return array;
 
-//   char * new_str;
-//   new_str = (char * )malloc(strlen(str)+1);
-//   memcpy(new_str,str,strlen(str));
-//   new_str[strlen(str)] = '\0';
+  if(array == NULL){
+    char **ret = (char** )malloc(C_EASY_STR_MAX_ARRAY_SIZE);
+    ret[0] = str_copy(str);
+    ret[1] = NULL;
+    return ret;
+  }
 
-//   if(array == NULL){
-//     char ** ret = (char**)malloc(C_EASY_STR_MAX_ARRAY_SIZE);
-//     ret[0] = new_str;
-//     ret[1] = NULL;
-//     return ret;
-//   }
-
-//   int i=0;
-//   while(array[i] != NULL){
-//     i++;
-//   }
-//   // realloc(array,i+1);
-//   array[i] = new_str;
-//   array[i+1] = NULL;
-//   return array;
-// }
+  int i=0;
+  while(array[i] != NULL){
+    i++;
+  }
+  array[i] = str_copy(str);
+  array[i+1] = NULL;
+  return array;
+}
 
 char * str_copy(char *str2){
     

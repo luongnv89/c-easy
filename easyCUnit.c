@@ -185,10 +185,16 @@ void test_str_get_indexes(void){
 void test_str_replace(void){
    CU_ASSERT_PTR_NULL(str_replace(NULL,"je","suis"));
 
-   CU_ASSERT_STRING_EQUAL(str_replace(str,"Je",NULL),str);
-   CU_ASSERT_STRING_EQUAL(str_replace(str,NULL,"Paris"),str);
-   CU_ASSERT_STRING_EQUAL(str_replace(str,"Paris","suis"),str);
-   char *mstr = str_replace(str,"suis","sera");
+   char *mstr = str_replace(str,"Je",NULL);
+   CU_ASSERT_STRING_EQUAL(mstr,str);
+   free(mstr);
+   mstr = str_replace(str,NULL,"Paris");
+   CU_ASSERT_STRING_EQUAL(mstr,str);
+   free(mstr);
+   mstr = str_replace(str,"Paris","suis");
+   CU_ASSERT_STRING_EQUAL(mstr,str);
+   free(mstr);
+   mstr = str_replace(str,"suis","sera");
    CU_ASSERT_STRING_EQUAL(mstr,"Je sera CUnit.");
    free(mstr);
    mstr = str_replace(str,"Je suis","Tu es");
@@ -223,26 +229,26 @@ void test_str_subvalue(void){
    free(mstr);
 }
 
-// void test_str_add_string_to_array(void){
-//    char ** array;
-//    array = NULL;
-//    array = str_add_string_to_array(array,NULL);
-//    CU_ASSERT_PTR_NULL(array);
-//    // For the first element, need to assign the address for array pointer.
-//    array = str_add_string_to_array(array,str);
-//    CU_ASSERT_STRING_EQUAL(array[0],str);
-//    CU_ASSERT_PTR_NULL(array[1]);
-//    array = str_add_string_to_array(array,NULL);
-//    CU_ASSERT_STRING_EQUAL(array[0],str);
-//    CU_ASSERT_PTR_NULL(array[1]);
-//    array = str_add_string_to_array(array,str0);
-//    CU_ASSERT_STRING_EQUAL(array[0],str);
-//    CU_ASSERT_STRING_EQUAL(array[1],str0);
-//    CU_ASSERT_PTR_NULL(array[2]);
-//    free(array[0]);
-//    free(array[1]);
-//    // free(array);
-// }
+void test_str_add_string_to_array(void){
+   char ** array;
+   array = NULL;
+   array = str_add_string_to_array(array,NULL);
+   CU_ASSERT_PTR_NULL(array);
+   // For the first element, need to assign the address for array pointer.
+   array = str_add_string_to_array(array,str);
+   CU_ASSERT_STRING_EQUAL(array[0],str);
+   CU_ASSERT_PTR_NULL(array[1]);
+   array = str_add_string_to_array(array,NULL);
+   CU_ASSERT_STRING_EQUAL(array[0],str);
+   CU_ASSERT_PTR_NULL(array[1]);
+   array = str_add_string_to_array(array,str0);
+   CU_ASSERT_STRING_EQUAL(array[0],str);
+   CU_ASSERT_STRING_EQUAL(array[1],str0);
+   CU_ASSERT_PTR_NULL(array[2]);
+   free(array[0]);
+   free(array[1]);
+   // free(array);
+}
 
 void test_str_print_array(void){
    char * array[5];
@@ -298,7 +304,7 @@ int main()
       {"test of str_split", test_str_split},
       {"test of str_subvalue", test_str_subvalue},
       {"test of str_replace", test_str_replace},
-      // {"test of str_add_string_to_array", test_str_add_string_to_array},
+      {"test of str_add_string_to_array", test_str_add_string_to_array},
       {"test of str_copy", test_str_copy},
       CU_TEST_INFO_NULL,
    };
