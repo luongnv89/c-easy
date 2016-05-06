@@ -1,5 +1,10 @@
 /**
  * c-easy is a c/c++ library which provides many funtions to help working with c/c++ easier.
+ *
+ * @version 1.0.0
+ * @author: luongnv89
+ * @license: MIT
+ * 
  */
 
  
